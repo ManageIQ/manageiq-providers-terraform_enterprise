@@ -18,9 +18,20 @@ class ManageIQ::Providers::TerraformEnterprise::Inventory::Parser < ManageIQ::Pr
 
   def workspaces
     collector.workspaces.each do |workspace|
+      vcs_repo = workspace.dig("attributes", "vcs-repo")
+      if vcs_repo
+        configuration_script_source = persister.configuration_script_sources.build(
+          :manager_ref => vcs_repo["repository-http-url"],
+          :name        => vcs_repo["identifier"],
+          :scm_url     => vcs_repo["repository-http-url"],
+          :scm_branch  => vcs_repo["branch"]
+        )
+      end
+
       persister.configuration_script_payloads.build(
-        :manager_ref => workspace["id"],
-        :name        => workspace.dig("attributes", "name")
+        :manager_ref                 => workspace["id"],
+        :name                        => workspace.dig("attributes", "name"),
+        :configuration_script_source => configuration_script_source
       )
     end
   end
