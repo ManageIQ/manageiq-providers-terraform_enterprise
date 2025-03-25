@@ -11,6 +11,12 @@ describe ManageIQ::Providers::TerraformEnterprise::AutomationManager::Refresher 
       end
 
       assert_inventory_not_changed(first_refresh, second_refresh)
+      assert_ems_counts
+    end
+
+    def assert_ems_counts
+      expect(ems.configuration_script_payloads.count).to eq(2)
+      expect(ems.configuration_scripts.count).to eq(3)
     end
   end
 end
