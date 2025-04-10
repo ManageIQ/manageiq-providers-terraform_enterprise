@@ -26,12 +26,12 @@ class ManageIQ::Providers::TerraformEnterprise::AutomationManager < ManageIQ::Pr
               :validationDependencies => %w[type zone_id provider_region],
               :fields                 => [
                 {
-                  :component  => "text-field",
-                  :name       => "endpoints.default.url",
-                  :label      => _("URL"),
+                  :component    => "text-field",
+                  :name         => "endpoints.default.url",
+                  :label        => _("URL"),
                   :initialValue => "https://app.terraform.io",
-                  :isRequired => true,
-                  :validate   => [{:type => "required"}],
+                  :isRequired   => true,
+                  :validate     => [{:type => "required"}],
                 },
                 {
                   :component    => "select",
@@ -77,7 +77,7 @@ class ManageIQ::Providers::TerraformEnterprise::AutomationManager < ManageIQ::Pr
     url, verify_ssl = default_endpoint.values_at("url", "verify_ssl")
     api_token       = ManageIQ::Password.try_decrypt(default_authentication["auth_key"]) if default_authentication
     api_token     ||= find(args["id"]).authentication_token("default")
-    url             = File.join(url, "/api/v2")
+    url             = URI.join(url, "/api/v2")
 
     require "faraday"
     Faraday.new(
@@ -112,7 +112,7 @@ class ManageIQ::Providers::TerraformEnterprise::AutomationManager < ManageIQ::Pr
 
   def connect_options(options = {})
     {
-      "endpoints" => {
+      "endpoints"       => {
         "default" => {
           "url"        => url,
           "verify_ssl" => verify_ssl
