@@ -1,5 +1,6 @@
 class ManageIQ::Providers::TerraformEnterprise::AutomationManager < ManageIQ::Providers::ExternalAutomationManager
   supports :create
+  supports :catalog
 
   has_many :configuration_script_payloads, :foreign_key => :manager_id
 
@@ -9,6 +10,10 @@ class ManageIQ::Providers::TerraformEnterprise::AutomationManager < ManageIQ::Pr
 
   def self.description
     @description ||= "Terraform Enterprise".freeze
+  end
+
+  def self.catalog_types
+    {"generic_terraform_enterprise" => N_("Terraform Enterprise Workspace")}
   end
 
   def self.params_for_create
