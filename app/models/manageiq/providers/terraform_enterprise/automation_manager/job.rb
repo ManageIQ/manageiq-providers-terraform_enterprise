@@ -33,7 +33,7 @@ class ManageIQ::Providers::TerraformEnterprise::AutomationManager::Job < Job
       options[:run_id] = run["id"]
       save!
     else
-      abort_job
+      abort_job("Failed to create run", "error")
     end
 
     queue_poll_runner
