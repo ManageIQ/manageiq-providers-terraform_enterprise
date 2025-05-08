@@ -26,23 +26,29 @@ class ManageIQ::Providers::TerraformEnterprise::Inventory::Parser < ManageIQ::Pr
           :scm_url     => vcs_repo["repository-http-url"],
           :scm_branch  => vcs_repo["branch"]
         )
+
+        payload_name = vcs_repo["display-identifier"]
+        payload_name << "@#{vcs_repo["branch"]}" if vcs_repo["branch"].present?
+
+        payload = persister.configuration_script_payloads.build(
+          :manager_ref                 => workspace["id"],
+          :name                        => payload_name,
+          :configuration_script_source => configuration_script_source
+        )
       end
 
-      persister.configuration_script_payloads.build(
-        :manager_ref                 => workspace["id"],
-        :name                        => workspace.dig("attributes", "name"),
-        :configuration_script_source => configuration_script_source
+      persister.configuration_scripts.build(
+        :manager_ref => workspace["id"],
+        :name        => workspace.dig("attributes", "name"),
+        :description => workspace.dig("attributes", "description"),
+        :parent      => payload
       )
     end
   end
 
   def runs
     collector.runs.each do |run|
-      workspace_id = run.dig("relationships", "workspace", "data", "id")
-      persister.configuration_scripts.build(
-        :manager_ref => run["id"],
-        :parent      => persister.configuration_script_payloads.lazy_find(workspace_id)
-      )
+      # TODO inventory runs as OrchestrationStacks
     end
   end
 end

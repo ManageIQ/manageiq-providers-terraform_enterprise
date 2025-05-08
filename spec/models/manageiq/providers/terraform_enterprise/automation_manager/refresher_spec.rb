@@ -19,8 +19,8 @@ describe ManageIQ::Providers::TerraformEnterprise::AutomationManager::Refresher 
 
     def assert_ems_counts
       expect(ems.configuration_script_sources.count).to eq(1)
-      expect(ems.configuration_script_payloads.count).to eq(2)
-      expect(ems.configuration_scripts.count).to eq(3)
+      expect(ems.configuration_script_payloads.count).to eq(1)
+      expect(ems.configuration_scripts.count).to eq(2)
     end
 
     def assert_specific_configuration_script_source
@@ -35,20 +35,20 @@ describe ManageIQ::Providers::TerraformEnterprise::AutomationManager::Refresher 
     end
 
     def assert_specific_configuration_script_payload
-      configuration_script_payload = ems.configuration_script_payloads.find_by(:name => "terraform-test")
+      configuration_script_payload = ems.configuration_script_payloads.find_by(:manager_ref => "ws-BkpXRVrXTfUNXuxT")
       expect(configuration_script_payload).to have_attributes(
         :manager_ref                 => "ws-BkpXRVrXTfUNXuxT",
-        :name                        => "terraform-test",
+        :name                        => "agrare/terraform-test@master",
         :type                        => "ManageIQ::Providers::TerraformEnterprise::AutomationManager::ConfigurationScriptPayload",
         :configuration_script_source => ems.configuration_script_sources.find_by(:name => "agrare/terraform-test")
       )
     end
 
     def assert_specific_configuration_script
-      configuration_script = ems.configuration_scripts.find_by(:manager_ref => "run-cRY3MuG7eHhBLRZd")
+      configuration_script = ems.configuration_scripts.find_by(:manager_ref => "ws-BkpXRVrXTfUNXuxT")
       expect(configuration_script).to have_attributes(
-        :manager_ref => "run-cRY3MuG7eHhBLRZd",
-        :parent      => ems.configuration_script_payloads.find_by(:name => "terraform-test"),
+        :manager_ref => "ws-BkpXRVrXTfUNXuxT",
+        :parent      => ems.configuration_script_payloads.find_by(:name => "agrare/terraform-test@master"),
         :type        => "ManageIQ::Providers::TerraformEnterprise::AutomationManager::ConfigurationScript"
       )
     end
