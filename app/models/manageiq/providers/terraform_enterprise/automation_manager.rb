@@ -1,4 +1,6 @@
 class ManageIQ::Providers::TerraformEnterprise::AutomationManager < ManageIQ::Providers::ExternalAutomationManager
+  include ProcessTasksMixin
+
   supports :create
 
   has_many :configuration_script_payloads, :foreign_key => :manager_id
