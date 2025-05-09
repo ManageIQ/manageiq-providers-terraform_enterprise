@@ -33,4 +33,8 @@ class ManageIQ::Providers::TerraformEnterprise::AutomationManager::Orchestration
   def raw_status
     Status.new(status)
   end
+
+  def refresh_ems
+    ext_management_system.queue_refresh
+  end
 end
