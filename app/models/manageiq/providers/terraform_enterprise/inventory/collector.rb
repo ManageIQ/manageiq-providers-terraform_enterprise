@@ -15,6 +15,10 @@ class ManageIQ::Providers::TerraformEnterprise::Inventory::Collector < ManageIQ:
     @workspaces ||= orgs.flat_map { |org| paginated_get("organizations/#{org["id"]}/workspaces") }
   end
 
+  def workspaces_by_id
+    @workspaces_by_id ||= workspaces.index_by { |ws| ws["id"] }
+  end
+
   def runs
     @runs ||= workspaces.flat_map { |ws| paginated_get("workspaces/#{ws["id"]}/runs") }
   end

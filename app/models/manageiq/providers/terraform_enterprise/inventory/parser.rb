@@ -48,7 +48,15 @@ class ManageIQ::Providers::TerraformEnterprise::Inventory::Parser < ManageIQ::Pr
 
   def runs
     collector.runs.each do |run|
-      # TODO inventory runs as OrchestrationStacks
+      workspace_id = run.dig("relationships", "workspace", "data", "id")
+      workspace    = collector.workspaces_by_id[workspace_id]
+
+      persister.orchestration_stacks.build(
+        :ems_ref              => run["id"],
+        :name                 => workspace.dig("attributes", "name"),
+        :status               => run.dig("attributes", "status"),
+        :configuration_script => persister.configuration_scripts.lazy_find(workspace_id)
+      )
     end
   end
 end
