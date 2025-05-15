@@ -29,4 +29,8 @@ class ManageIQ::Providers::TerraformEnterprise::AutomationManager::Orchestration
   def self.db_name
     'ConfigurationJob'
   end
+
+  def raw_status
+    Status.new(status)
+  end
 end
