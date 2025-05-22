@@ -1,19 +1,19 @@
 class ManageIQ::Providers::TerraformEnterprise::AutomationManager::OrchestrationStack::Status < ::OrchestrationStack::Status
   def initialize(status)
-    self.status = status
+    self.status = status.downcase
     self.reason = self.class.run_state_to_description(status)
   end
 
   def succeeded?
-    status.downcase == "planned_and_finished"
+    status == "planned_and_finished"
   end
 
   def failed?
-    %w[policy_soft_failed errored].include?(status.downcase)
+    %w[policy_soft_failed errored].include?(status)
   end
 
   def canceled?
-    %w[discarded canceled force_canceled].include?(status.downcase)
+    %w[discarded canceled force_canceled].include?(status)
   end
 
   # Lookup table of run state descriptions
