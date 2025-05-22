@@ -2,6 +2,7 @@ class ManageIQ::Providers::TerraformEnterprise::AutomationManager < ManageIQ::Pr
   include ProcessTasksMixin
 
   supports :create
+  supports :catalog
 
   has_many :configuration_script_payloads, :foreign_key => :manager_id
   has_many :orchestration_stacks, :foreign_key => :ems_id
@@ -12,6 +13,10 @@ class ManageIQ::Providers::TerraformEnterprise::AutomationManager < ManageIQ::Pr
 
   def self.description
     @description ||= "Terraform Enterprise".freeze
+  end
+
+  def self.catalog_types
+    {"generic_terraform_enterprise" => N_("Terraform Enterprise Workspace")}
   end
 
   def self.params_for_create
