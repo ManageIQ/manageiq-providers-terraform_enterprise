@@ -4,6 +4,7 @@ class ManageIQ::Providers::TerraformEnterprise::AutomationManager < ManageIQ::Pr
   supports :create
 
   has_many :configuration_script_payloads, :foreign_key => :manager_id
+  has_many :orchestration_stacks, :foreign_key => :ems_id
 
   def self.ems_type
     @ems_type ||= "terraform_enterprise".freeze
