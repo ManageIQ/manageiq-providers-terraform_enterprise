@@ -23,6 +23,10 @@ class ManageIQ::Providers::TerraformEnterprise::Inventory::Collector < ManageIQ:
     @runs ||= workspaces.flat_map { |ws| paginated_get("workspaces/#{ws["id"]}/runs") }
   end
 
+  def workspace_variables
+    @workspace_variables ||= workspaces.to_h { |ws| [ws["id"], paginated_get("workspaces/#{ws["id"]}/vars")] }
+  end
+
   private
 
   def paginated_get(url, query_params = {})
