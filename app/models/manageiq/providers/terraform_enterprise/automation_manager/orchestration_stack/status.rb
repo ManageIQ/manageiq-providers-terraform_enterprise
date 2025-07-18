@@ -5,7 +5,7 @@ class ManageIQ::Providers::TerraformEnterprise::AutomationManager::Orchestration
   end
 
   def succeeded?
-    status == "planned_and_finished"
+    %w[planned_and_finished applied].include?(status)
   end
 
   def failed?
