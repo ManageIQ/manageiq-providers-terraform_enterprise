@@ -16,6 +16,10 @@ class ManageIQ::Providers::TerraformEnterprise::AutomationManager::Orchestration
     %w[discarded canceled force_canceled].include?(status)
   end
 
+  def running?
+    !succeeded? && !failed? && !canceled?
+  end
+
   # Lookup table of run state descriptions
   # https://developer.hashicorp.com/terraform/cloud-docs/api-docs/run#run-states
   def self.run_state_to_description(status)
