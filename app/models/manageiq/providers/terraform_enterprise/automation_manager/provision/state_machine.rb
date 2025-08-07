@@ -27,14 +27,20 @@ module ManageIQ::Providers::TerraformEnterprise::AutomationManager::Provision::S
   end
 
   def post_provision
-    signal :finish
+    signal :mark_as_completed
   end
 
   def running?
     stack.raw_status.running?
   end
 
+  def mark_as_completed
+    update_and_notify_parent(:state => 'provisioned')
+    signal :finish
+  end
+
   def finish
+    mark_execution_servers
   end
 
   def stack
