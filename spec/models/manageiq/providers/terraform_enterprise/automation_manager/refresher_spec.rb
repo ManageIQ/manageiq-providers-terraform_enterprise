@@ -22,7 +22,7 @@ describe ManageIQ::Providers::TerraformEnterprise::AutomationManager::Refresher 
       expect(ems.configuration_script_sources.count).to eq(1)
       expect(ems.configuration_script_payloads.count).to eq(1)
       expect(ems.configuration_scripts.count).to eq(2)
-      expect(ems.orchestration_stacks.count).to eq(3)
+      expect(ems.orchestration_stacks.count).to eq(20)
     end
 
     def assert_specific_configuration_script_source
@@ -51,7 +51,8 @@ describe ManageIQ::Providers::TerraformEnterprise::AutomationManager::Refresher 
       expect(configuration_script).to have_attributes(
         :manager_ref => "ws-BkpXRVrXTfUNXuxT",
         :parent      => ems.configuration_script_payloads.find_by(:name => "agrare/terraform-test@master"),
-        :type        => "ManageIQ::Providers::TerraformEnterprise::AutomationManager::ConfigurationScript"
+        :type        => "ManageIQ::Providers::TerraformEnterprise::AutomationManager::ConfigurationScript",
+        :variables   => {"FOO" => "BAR"}
       )
     end
 
