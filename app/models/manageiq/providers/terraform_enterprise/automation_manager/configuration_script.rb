@@ -9,6 +9,14 @@ class ManageIQ::Providers::TerraformEnterprise::AutomationManager::Configuration
     "OrchestrationStack"
   end
 
+  def self.manager_class
+    module_parent
+  end
+
+  def my_zone
+    manager&.my_zone
+  end
+
   def run(options = {})
     variables = options[:variables] || []
 
