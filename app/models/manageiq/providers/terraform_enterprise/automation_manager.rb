@@ -16,7 +16,7 @@ class ManageIQ::Providers::TerraformEnterprise::AutomationManager < ManageIQ::Pr
   end
 
   def self.catalog_types
-    {"generic_terraform_enterprise" => N_("Terraform Enterprise Workspace")}
+    {"terraform_enterprise" => N_("Terraform Enterprise Workspace")}
   end
 
   def self.params_for_create
