@@ -5,6 +5,8 @@ class ManageIQ::Providers::TerraformEnterprise::AutomationManager::ProvisionWork
   end
 
   def allowed_configuration_scripts(*args)
-    ManageIQ::Providers::TerraformEnterprise::AutomationManager::ConfigurationScript.all
+    workspaces = ManageIQ::Providers::TerraformEnterprise::AutomationManager::ConfigurationScript.all
+
+    workspaces.to_h { |workspace| [workspace.id, workspace.name] }
   end
 end

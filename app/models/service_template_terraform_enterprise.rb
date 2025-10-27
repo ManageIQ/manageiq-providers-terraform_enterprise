@@ -17,7 +17,7 @@ class ServiceTemplateTerraformEnterprise < ServiceTemplate
   end
 
   def self.validate_config_info!(config_info)
-    raise _("Must provide a source_id") if config_info[:source_id].nil?
+    raise _("Must provide a src_configuration_script_id") if config_info[:src_configuration_script_id].nil?
   end
 
   private
