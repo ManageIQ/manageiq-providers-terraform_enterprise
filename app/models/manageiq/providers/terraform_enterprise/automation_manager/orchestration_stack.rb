@@ -54,12 +54,20 @@ class ManageIQ::Providers::TerraformEnterprise::AutomationManager::Orchestration
   end
 
   def refresh_ems
-    ext_management_system.queue_refresh
+    update_with_provider_object(provider_object)
   end
 
   def provider_object(connection = nil)
     connection ||= ext_management_system.connect
     response = connection.get("runs/#{ems_ref}")
     JSON.parse(response.body)["data"] if response.success?
+  end
+
+  private
+
+  def update_with_provider_object(run)
+    return if run.nil?
+
+    update!(:status => run.dig("attributes", "status"))
   end
 end
