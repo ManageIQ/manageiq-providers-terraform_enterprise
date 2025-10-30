@@ -5,8 +5,8 @@ class ManageIQ::Providers::TerraformEnterprise::AutomationManager::ProvisionWork
   end
 
   def allowed_configuration_scripts(*args)
-    workspaces = ManageIQ::Providers::TerraformEnterprise::AutomationManager::ConfigurationScript.all
-
-    workspaces.to_h { |workspace| [workspace.id, workspace.name] }
+    ManageIQ::Providers::TerraformEnterprise::AutomationManager::ConfigurationScript.all.map do |cs|
+      build_ci_hash_struct(cs, %w[name description])
+    end
   end
 end
