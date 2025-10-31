@@ -12,9 +12,9 @@ RSpec.describe ServiceTemplateTerraformEnterprise do
       :display      => "false",
       :description  => "a description",
       :config_info  => {
-        :owner_email => user.email,
-        :source_id   => configuration_script.id,
-        :provision   => {
+        :owner_email                 => user.email,
+        :src_configuration_script_id => [configuration_script.id, configuration_script.name],
+        :provision                   => {
           :fqname    => provision_resource_action.fqname,
           :dialog_id => service_dialog.id
         }
@@ -36,10 +36,10 @@ RSpec.describe ServiceTemplateTerraformEnterprise do
     end
 
     it "raises an exception if configuration_script_id is missing" do
-      catalog_item_options[:config_info].delete(:source_id)
+      catalog_item_options[:config_info].delete(:src_configuration_script_id)
 
       expect { described_class.create_catalog_item(catalog_item_options, user) }
-        .to raise_error(StandardError, "Must provide a source_id")
+        .to raise_error(StandardError, "Must provide a src_configuration_script_id")
     end
   end
 
@@ -56,8 +56,8 @@ RSpec.describe ServiceTemplateTerraformEnterprise do
           :display      => "false",
           :description  => "a description",
           :config_info  => {
-            :source_id => new_configuration_script.id,
-            :provision               => {
+            :src_configuration_script_id => [new_configuration_script.id, new_configuration_script.name],
+            :provision                   => {
               :fqname    => provision_resource_action.fqname,
               :dialog_id => service_dialog.id
             }
@@ -67,7 +67,7 @@ RSpec.describe ServiceTemplateTerraformEnterprise do
 
       expect(service_template.reload).to have_attributes(
         :name        => "Updated Terraform Enterprise",
-        :config_info => hash_including(:source_id => new_configuration_script.id)
+        :config_info => hash_including(:src_configuration_script_id => [new_configuration_script.id, new_configuration_script.name])
       )
     end
   end
