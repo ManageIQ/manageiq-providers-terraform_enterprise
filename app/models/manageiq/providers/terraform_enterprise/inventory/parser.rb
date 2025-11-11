@@ -3,7 +3,6 @@ class ManageIQ::Providers::TerraformEnterprise::Inventory::Parser < ManageIQ::Pr
     orgs
     projects
     workspaces
-    runs
   end
 
   def orgs
@@ -42,20 +41,6 @@ class ManageIQ::Providers::TerraformEnterprise::Inventory::Parser < ManageIQ::Pr
         :name        => workspace.dig("attributes", "name"),
         :description => workspace.dig("attributes", "description"),
         :parent      => payload
-      )
-    end
-  end
-
-  def runs
-    collector.runs.each do |run|
-      workspace_id = run.dig("relationships", "workspace", "data", "id")
-      workspace    = collector.workspaces_by_id[workspace_id]
-
-      persister.orchestration_stacks.build(
-        :ems_ref              => run["id"],
-        :name                 => workspace.dig("attributes", "name"),
-        :status               => run.dig("attributes", "status"),
-        :configuration_script => persister.configuration_scripts.lazy_find(workspace_id)
       )
     end
   end
