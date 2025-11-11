@@ -48,11 +48,12 @@ describe ManageIQ::Providers::TerraformEnterprise::AutomationManager::Provision 
     end
 
     it "queues check_provisioned" do
+      subject.instance_variable_set(:@stack, new_stack)
+      allow(new_stack).to receive(:provider_object).and_return({"attributes" => {"status" => "planning"}})
+
       subject.run_provision
 
       expect(subject.reload.phase).to eq("check_provisioned")
-      expect(MiqQueue.find_by(:class_name => "EmsRefresh", :method_name => "refresh"))
-        .to have_attributes(:state => "ready", :data => [[ems.class.name, ems.id]])
     end
 
     context "when create_stack fails" do
@@ -71,11 +72,16 @@ describe ManageIQ::Providers::TerraformEnterprise::AutomationManager::Provision 
   describe "check_provisioned" do
     let(:phase) { "check_provisioned" }
 
+    before do
+      allow(new_stack).to receive(:provider_object).and_return({"attributes" => {"status" => stack_status}})
+      subject.instance_variable_set(:@stack, new_stack)
+      subject.phase_context[:stack_id] = new_stack.id
+    end
+
     context "when the plan is still running" do
       let(:stack_status) { "planning" }
 
       it "requeues check_provisioned" do
-        subject.phase_context[:stack_id] = new_stack.id
         subject.check_provisioned
 
         expect(subject.reload).to have_attributes(
@@ -90,7 +96,6 @@ describe ManageIQ::Providers::TerraformEnterprise::AutomationManager::Provision 
       let(:stack_status) { "planned_and_finished" }
 
       it "finishes the job" do
-        subject.phase_context[:stack_id] = new_stack.id
         subject.check_provisioned
 
         expect(subject.reload).to have_attributes(

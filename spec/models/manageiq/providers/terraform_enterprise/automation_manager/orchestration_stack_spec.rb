@@ -64,14 +64,10 @@ RSpec.describe ManageIQ::Providers::TerraformEnterprise::AutomationManager::Orch
     let(:ems) { FactoryBot.create(:ems_terraform_enterprise_with_vcr_authentication) }
 
     it "queues a refresh of the orchestration_stack" do
-      stack.refresh_ems
+      expect(stack).to receive(:provider_object).and_return({"attributes" => {"status" => "planned_and_finished"}})
 
-      expect(MiqQueue.count).to eq(1)
-      expect(MiqQueue.first).to have_attributes(
-        :class_name  => "EmsRefresh",
-        :method_name => "refresh",
-        :data        => [[ems.class.name, ems.id]]
-      )
+      stack.refresh_ems
+      expect(stack.reload.raw_status).to be_succeeded
     end
   end
 end
