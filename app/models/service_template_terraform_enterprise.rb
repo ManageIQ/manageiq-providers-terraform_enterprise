@@ -1,6 +1,4 @@
-class ServiceTemplateTerraformEnterprise < ServiceTemplate
-  include ServiceTemplateAutomationMixin
-
+class ServiceTemplateTerraformEnterprise < ServiceTemplateAutomation
   def self.create_catalog_item(options, auth_user = nil)
     transaction do
       create_from_options(options).tap do |service_template|
