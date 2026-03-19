@@ -1,4 +1,4 @@
-class ServiceTerraformEnterprise < Service
+class ServiceTerraformEnterprise < ServiceAutomation
   include ServiceConfigurationMixin
 
   alias_method :terraform_workspace, :configuration_script

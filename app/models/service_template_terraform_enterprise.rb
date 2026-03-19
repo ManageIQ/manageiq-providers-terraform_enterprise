@@ -1,4 +1,4 @@
-class ServiceTemplateTerraformEnterprise < ServiceTemplate
+class ServiceTemplateTerraformEnterprise < ServiceTemplateAutomation
   include ServiceTemplateAutomationMixin
 
   def self.create_catalog_item(options, auth_user = nil)
