@@ -8,6 +8,8 @@ module ManageIQ::Providers::TerraformEnterprise::AutomationManager::Provision::S
     stack       = stack_class.create_stack(source)
 
     phase_context[:stack_id] = stack.id
+    connect_to_service!(stack, :name => "Provision")
+
     save!
 
     signal :check_provisioned
